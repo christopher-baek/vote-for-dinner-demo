@@ -19,6 +19,8 @@
   <body>
     <input id="newUserFullName" type="text">
     <button id="registerNewUser">Register</button>
+    <ul id="userList">
+    </ul>
     <script>
       document.getElementById('registerNewUser').addEventListener('click', function() {
         var fullName = document.getElementById('newUserFullName').value;
@@ -27,6 +29,33 @@
           fullName: fullName
         });
         document.getElementById('newUserFullName').value = '';
+      });
+    </script>
+    <script>
+      var usersRef = firebase.database().ref('users');
+
+      usersRef.on('child_added', function(data) {
+        var userId = data.key;
+        var userData = data.val();
+        var fullName = userData['fullName'];
+
+        var userListItem = document.createElement('li');
+        userListItem.id = 'user-' + userId;
+        userListItem.innerText = fullName + '(' + userId + ')';
+        userListItem.addEventListener('click', function(event) {
+
+          firebase.database().ref('users/' + userId).remove();
+        });
+        document.getElementById('userList').appendChild(userListItem);
+      });
+      /*
+      usersRef.on('child_changed', function(data) {
+        
+      });
+      */
+      usersRef.on('child_removed', function(data) {
+        var userId = data.key;
+        document.getElementById('user-' + userId).remove();
       });
     </script>
   </body>
