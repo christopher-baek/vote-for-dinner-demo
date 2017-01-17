@@ -17,5 +17,17 @@
     </script>
   </head>
   <body>
+    <input id="newUserFullName" type="text">
+    <button id="registerNewUser">Register</button>
+    <script>
+      document.getElementById('registerNewUser').addEventListener('click', function() {
+        var fullName = document.getElementById('newUserFullName').value;
+        var userRef = firebase.database().ref('users').push();
+        userRef.set({
+          fullName: fullName
+        });
+        document.getElementById('newUserFullName').value = '';
+      });
+    </script>
   </body>
 </html>
