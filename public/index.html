@@ -18,83 +18,19 @@
   </head>
   <body>
     <div>
-      <input id="newUserFullName" type="text">
-      <button id="registerNewUser">Register</button>
+      Name: <input id="userName" type="text">
+      <button id="addNewUser">Register</button>
     </div>
     <div>
-      <input id="newDinnerOption" type="text">
-      <button id="addNewDinnerOption">Add</button>
+      Dinner: <input id="dinnerName" type="text">
+      <button id="addNewDinner">Add</button>
     </div>
     <ul id="userList">
     </ul>
     <ul id="dinnerList">
     </ul>
-    <script>
-      document.getElementById('registerNewUser').addEventListener('click', function() {
-        var fullName = document.getElementById('newUserFullName').value;
-        var userRef = firebase.database().ref('users').push();
-        userRef.set({
-          fullName: fullName
-        });
-        document.getElementById('newUserFullName').value = '';
-      });
-    </script>
-    <script>
-      var usersRef = firebase.database().ref('users');
-
-      usersRef.on('child_added', function(data) {
-        var userId = data.key;
-        var userData = data.val();
-        var fullName = userData['fullName'];
-
-        var userListItem = document.createElement('li');
-        userListItem.id = 'user-' + userId;
-        userListItem.innerText = fullName + '(' + userId + ')';
-        userListItem.addEventListener('click', function(event) {
-          firebase.database().ref('users/' + userId).remove();
-        });
-        document.getElementById('userList').appendChild(userListItem);
-      });
-      /*
-      usersRef.on('child_changed', function(data) {
-        
-      });
-      */
-      usersRef.on('child_removed', function(data) {
-        var userId = data.key;
-        document.getElementById('user-' + userId).remove();
-      });
-    </script>
-    <script>
-      document.getElementById('addNewDinnerOption').addEventListener('click', function() {
-        var dinnerOption = document.getElementById('newDinnerOption').value;
-        var dinnerRef = firebase.database().ref('dinner').push();
-        dinnerRef.set({
-          name: dinnerOption
-        });
-        document.getElementById('newDinnerOption').value = '';
-      });
-    </script>
-    <script>
-      var dinnerRef = firebase.database().ref('dinner');
-
-      dinnerRef.on('child_added', function(data) {
-        var dinnerId = data.key;
-        var dinnerData = data.val();
-        var name = dinnerData['name'];
-
-        var dinnerListItem = document.createElement('li');
-        dinnerListItem.id = 'dinner-' + dinnerId;
-        dinnerListItem.innerText = name + '(' + dinnerId + ')';
-        dinnerListItem.addEventListener('click', function(event) {
-          firebase.database().ref('dinner/' + dinnerId).remove();
-        });
-        document.getElementById('dinnerList').appendChild(dinnerListItem);
-      });
-      dinnerRef.on('child_removed', function(data) {
-        var dinnerId = data.key;
-        document.getElementById('dinner-' + dinnerId).remove();
-      });
-    </script>
+    <ul id="voteList">
+    </ul>
+    <script src="vote-for-dinner-demo.js"></script>
   </body>
 </html>
